@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -29,12 +26,14 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
+import com.alexc.ph.pantrypal.ui.components.GradientBackground
 import com.alexc.ph.pantrypal.ui.navigation.PantryPalNavigationSuiteScaffold
 import com.alexc.ph.pantrypal.ui.products.ProductsRoute
 import com.alexc.ph.pantrypal.ui.products.list.productListScreen
 import com.alexc.ph.pantrypal.ui.products.productsScreen
 import com.alexc.ph.pantrypal.ui.shoppinglist.shoppingListScreen
 import com.alexc.ph.pantrypal.ui.supplies.suppliesScreen
+import com.alexc.ph.pantrypal.ui.theme.LocalGradientColors
 import kotlin.reflect.KClass
 
 @Composable
@@ -43,74 +42,78 @@ fun PantryPalApp(
     appState: PantryPalAppState,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
 ) {
-    val currentDestination = appState.currentDestination
-
-    PantryPalNavigationSuiteScaffold(
-        navigationSuiteItems = {
-            appState.topLevelDestinations.forEach { destination ->
-                val selected = currentDestination.isRouteInHierarchy(destination.route)
-                item(
-                    selected = selected,
-                    onClick = { appState.navigateToTopLevelDestination(appDestinations = destination) },
-                    icon = {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(destination.unselectedIcon),
-                            contentDescription = null,
-                        )
-                    },
-                    selectedIcon = {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(destination.selectedIcon),
-                            contentDescription = null,
-                        )
-                    },
-                    label = { Text(stringResource(destination.iconTextId)) },
-                    modifier = Modifier
-                )
-            }
-        },
-        windowAdaptiveInfo = windowAdaptiveInfo,
+    GradientBackground(
+        gradientColors = LocalGradientColors.current
     ) {
-        Scaffold(
-            modifier = modifier,
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        ) { padding ->
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal,
-                        ),
-                    ),
-            ) {
-                val destination = appState.currentTopLevelDestination
-                val shouldShowTopAppBar = destination != null
+        val currentDestination = appState.currentDestination
 
-                Box(
-                    modifier = Modifier.consumeWindowInsets(
-                        if (shouldShowTopAppBar) {
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                        } else {
-                            WindowInsets(0, 0, 0, 0)
+        PantryPalNavigationSuiteScaffold(
+            navigationSuiteItems = {
+                appState.topLevelDestinations.forEach { destination ->
+                    val selected = currentDestination.isRouteInHierarchy(destination.route)
+                    item(
+                        selected = selected,
+                        onClick = { appState.navigateToTopLevelDestination(appDestinations = destination) },
+                        icon = {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(destination.unselectedIcon),
+                                contentDescription = null,
+                            )
                         },
-                    ),
+                        selectedIcon = {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(destination.selectedIcon),
+                                contentDescription = null,
+                            )
+                        },
+                        label = { Text(stringResource(destination.iconTextId)) },
+                        modifier = Modifier
+                    )
+                }
+            },
+            windowAdaptiveInfo = windowAdaptiveInfo,
+        ) {
+            Scaffold(
+                modifier = modifier,
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            ) { padding ->
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Horizontal,
+                            ),
+                        ),
                 ) {
-                    val navController = appState.navController
-                    NavHost(
-                        navController = navController,
-                        startDestination = ProductsRoute,
-                        modifier = modifier
-                    ) {
-                        productsScreen(navigateToProductList = appState::navigateToProductList)
-                        productListScreen(navigateBack = appState::navigateBack)
-                        suppliesScreen()
-                        shoppingListScreen()
+                    val destination = appState.currentTopLevelDestination
+                    val shouldShowTopAppBar = destination != null
 
+                    Box(
+                        modifier = Modifier.consumeWindowInsets(
+                            if (shouldShowTopAppBar) {
+                                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                            } else {
+                                WindowInsets(0, 0, 0, 0)
+                            },
+                        ),
+                    ) {
+                        val navController = appState.navController
+                        NavHost(
+                            navController = navController,
+                            startDestination = ProductsRoute,
+                            modifier = modifier
+                        ) {
+                            productsScreen(navigateToProductList = appState::navigateToProductList)
+                            productListScreen(navigateBack = appState::navigateBack)
+                            suppliesScreen()
+                            shoppingListScreen()
+
+                        }
                     }
                 }
             }

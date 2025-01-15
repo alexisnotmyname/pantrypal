@@ -89,8 +89,7 @@ fun ProductsScreen(
         val categories = (uiState as ProductsUiState.Success).categories
         ProductCategoryScreen(
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .fillMaxSize(),
             categories = categories,
             onAddCategoryClicked = { showAddCategory = true },
             onCategorySelected = { category ->
@@ -472,7 +471,7 @@ fun DeleteBackground(
 @Preview
 @Composable
 fun CategoryItemPreview() {
-    PantryPalTheme(dynamicColor = false) {
+    PantryPalTheme {
         val category = Category(1, "Category 1", true)
         ProductCategoryItem(
             modifier = Modifier.fillMaxWidth(),
@@ -484,7 +483,7 @@ fun CategoryItemPreview() {
 @Preview(showBackground = true)
 @Composable
 fun AddCategoryPreview() {
-    PantryPalTheme(dynamicColor = false) {
+    PantryPalTheme {
         AddCategory(
             modifier = Modifier.fillMaxWidth()
         )
@@ -500,7 +499,7 @@ fun ProductCategoryScreenPreview() {
         Category(3, "Category 3", true),
         Category(4, "Category 4", true),
     )
-    PantryPalTheme(dynamicColor = false) {
+    PantryPalTheme {
         Surface {
             ProductCategoryScreen(
                 modifier = Modifier.fillMaxSize(),

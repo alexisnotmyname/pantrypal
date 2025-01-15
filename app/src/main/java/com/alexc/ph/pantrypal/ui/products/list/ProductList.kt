@@ -36,11 +36,12 @@ fun ProductList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductList(
+    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     title: String,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         PantryPalTopAppBar(
             title = title,
