@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PantryPal</string>
+    <string name="products">Products</string>
+    <string name="supplies">Supplies</string>
+    <string name="list">List</string>
+    <string name="settings">Settings</string>
+    <string name="back">back</string>
+    <string name="new_category">New product category</string>
+    <string name="hint_category_name">Category name</string>
+    <string name="save">Save</string>
+    <string name="enter_category_name">Must enter a category name</string>
+
+</resources>
